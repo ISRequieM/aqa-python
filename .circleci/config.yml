@@ -12,7 +12,6 @@ jobs:
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
             python -m pytest phase01/tests/testFibonacci.py
 
       - store_artifacts:
