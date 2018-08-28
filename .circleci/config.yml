@@ -10,6 +10,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install dependencies
+          command: |
+             pip install -r requirements.txt
+      - run:
           name: run tests
           command: |
             python -m pytest phase01/tests/testFibonacci.py
