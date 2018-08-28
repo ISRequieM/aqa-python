@@ -20,7 +20,7 @@ jobs:
           command: |
             python -m venv venv
             . venv/bin/activate
-            python -m pytest phase01/tests/testFibonacci.py
+            python -m pytest phase01/tests/
 
       - store_artifacts:
           path: test-reports
