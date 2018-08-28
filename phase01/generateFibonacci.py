@@ -1,9 +1,9 @@
-def generateFibonacci(numberOfNumbers):
-    fibonacciList = []
-    while len(fibonacciList) < numberOfNumbers:
-        if len(fibonacciList) < 2:
-            fibonacciList.append(1)
+def generateFibonacci(length):
+    fibonacci_list = []
+    while len(fibonacci_list) < length:
+        if len(fibonacci_list) < 2:
+            fibonacci_list.append(1)
         else:
-            newNumber = (fibonacciList[-1])+(fibonacciList[-2])
-            fibonacciList.append(newNumber)
-    return fibonacciList
+            new_number = (fibonacci_list[-1])+(fibonacci_list[-2])
+            fibonacci_list.append(new_number)
+    return fibonacci_list
