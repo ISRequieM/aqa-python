@@ -12,11 +12,15 @@ jobs:
       - run:
           name: install dependencies
           command: |
-             pip install -r requirements.txt
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
       - run:
           name: run tests
           command: |
-            python -m pytest phase01/tests/testFibonacci.py
+            python3 -m venv venv
+            . venv/bin/activate
+            python3 -m pytest phase01/tests/testFibonacci.py
 
       - store_artifacts:
           path: test-reports
