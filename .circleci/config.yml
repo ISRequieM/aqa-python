@@ -1,0 +1,27 @@
+
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7.0
+
+    working_directory: ~/aqa-python
+
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - run:
+          name: run tests
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            python -m pytest phase01/tests/
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
