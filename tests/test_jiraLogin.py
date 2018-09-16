@@ -1,6 +1,5 @@
-from phase02.json_fixtures import *
-from phase02.jira import *
-import requests
+from jira.jira import *
+
 username = JiraParameters.user
 user_password = JiraParameters.password
 project_key = JiraParameters.project_key

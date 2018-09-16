@@ -1,4 +1,4 @@
-from phase01.generateFibonacci import generateFibonacci
+from fibonacci.generateFibonacci import generateFibonacci
 
 
 def testFibonacci():

@@ -1,4 +1,4 @@
-from phase02.jira import *
+from jira.jira import *
 import random
 
 jira_rest = JiraRestActions(JiraParameters.user, JiraParameters.password, JiraParameters.project_key)

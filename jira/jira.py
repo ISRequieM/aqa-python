@@ -1,6 +1,6 @@
 import requests
 import json
-from phase02.json_fixtures import *
+from jira.json_fixtures import *
 
 class JiraParameters():
     url = "http://jira.hillel.it:8080"
