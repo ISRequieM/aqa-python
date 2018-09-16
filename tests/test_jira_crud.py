@@ -34,7 +34,7 @@ def test_create_issue():
 
 def test_update_issue():
     issue_key = issue_keys.get("key1")
-    issue_fields = {'summary': updated_summary, 'description': 'changed_description'}
+    issue_fields = {"summary": updated_summary, "description": "changed_description", "priority": {"name": "High"}}
     result = jira_rest.updateIssue(issue_key, issue_fields)
     assert result.get("success") == True
     result = jira_rest.assignIssue(JiraParameters.user, issue_keys.get("key1"))
