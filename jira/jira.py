@@ -41,10 +41,10 @@ class JiraRestActions:
         responseJson = json.loads(str(create_r.text))
         if create_r.status_code == 201:
             print("Issue created: "+responseJson.get("key"))
-            return {"success": True, "issueKey": responseJson.get("key")}
+            return {"success": True, "issueKey": responseJson.get("key"), "status_code": create_r.status_code}
         else:
             print("Failed to create issue: "+str(responseJson.get("errors")))
-            return {"success": False, "errors": responseJson.get("errors")}
+            return {"success": False, "errors": responseJson.get("errors"), "status_code": create_r.status_code}
 
     def updateIssue(self, issueKey, issue_fields):
         headers = get_contenttype_header("json")
@@ -53,10 +53,10 @@ class JiraRestActions:
         update_r = requests.put(endpoint_url, json=body, headers=headers, cookies=self.cookies)
         if update_r.status_code == 204:
             print("Issue "+issueKey+" updated successfully")
-            return {"success": True}
+            return {"success": True, "status_code": update_r.status_code}
         else:
             print("Unable to update issue "+issueKey)
-            return {"success": False}
+            return {"success": False, "status_code": update_r.status_code}
 
     def assignIssue(self, username, issueKey):
         headers = get_contenttype_header("json")
@@ -65,36 +65,36 @@ class JiraRestActions:
         assign_r = requests.put(endpoint_url, json=body, headers=headers, cookies=self.cookies)
         if assign_r.status_code == 204:
             print("Issue "+issueKey+" assigned successfully to "+username)
-            return {"success": True}
+            return {"success": True, "status_code": assign_r.status_code}
         else:
             print("Unable to  assign issue "+issueKey+"to "+username)
-            return {"success": False}
+            return {"success": False, "status_code": assign_r.status_code}
 
     def query_issues_by_exact_value_in_field(self, field, value):
         headers = get_contenttype_header("json")
         endpoint_url = JiraParameters.url+JiraParameters.search_endpoint+field+"="+value
         search_r = requests.get(endpoint_url, cookies=self.cookies, headers=headers)
         if search_r.status_code == 200:
-            return {"success": True, "body": json.loads(str(search_r.text))}
+            return {"success": True, "body": json.loads(str(search_r.text)), "status_code": search_r.status_code}
         else:
-            return{"success": False, "body": search_r.text}
+            return{"success": False, "body": search_r.text, "status_code": search_r.status_code}
 
     def query_issues_by_like_value_in_field(self, field, value):
         headers = get_contenttype_header("json")
         endpoint_url = JiraParameters.url+JiraParameters.search_endpoint+field+"~"+value
         search_r = requests.get(endpoint_url, cookies=self.cookies, headers=headers)
         if search_r.status_code == 200:
-            return {"success": True, "body": json.loads(str(search_r.text))}
+            return {"success": True, "body": json.loads(str(search_r.text)), "status_code": search_r.status_code}
         else:
-            return{"success": False, "body": search_r.text}
+            return{"success": False, "body": search_r.text, "status_code": search_r.status_code}
 
     def delete_issue(self, issueKey):
         headers = get_contenttype_header("json")
         endpoint_url = JiraParameters.url+JiraParameters.issue_endpoint+"/"+str(issueKey)
         delete_r = requests.delete(endpoint_url, headers=headers, cookies=self.cookies)
         if delete_r.status_code == 204:
-            print("Issue " + issueKey + " deleted successfully")
-            return {"success": True}
+            print("Issue " + issueKey + " deleted successfully", )
+            return {"success": True, "status_code": delete_r.status_code}
         else:
             print("Unable to delete issue " + issueKey)
-            return {"success": False}
+            return {"success": False, "status_code": delete_r.status_code}
