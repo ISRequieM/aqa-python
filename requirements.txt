@@ -1,2 +1,4 @@
 pytest
 requests
+pytest-xdist
+pytest-rerunfailures
