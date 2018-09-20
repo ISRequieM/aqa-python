@@ -2,10 +2,12 @@ from jira.jira import *
 import random
 
 jira_rest = JiraRestActions(JiraParameters.user, JiraParameters.password, JiraParameters.project_key)
-jira_rest.authenticate()
-issue_keys = {}
-updated_summary = "updated_summary_by_istonik"+str(random.randint(1, 1000))
 
+issue_keys = {}
+updated_summary = "updated_summary_by_istonik" + str(random.randint(1, 1000))
+
+def test_setup():
+    jira_rest.authenticate()
 
 def test_create_issue_missing_field():
     issue_fields = {}
