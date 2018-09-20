@@ -20,7 +20,7 @@ jobs:
           command: |
             python -m venv venv
             . venv/bin/activate
-            python -m pytest -n=4 --dist loadfile
+            python -m pytest -n=4 --dist loadfile --reruns=4
 
       - store_artifacts:
           path: test-reports
