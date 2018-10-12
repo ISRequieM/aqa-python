@@ -5,12 +5,10 @@ from selenium.webdriver.chrome.options import Options
 
 
 class TestJiraLogin:
-
-    def test_setup(self):
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        self.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
-        self.login_page = LoginPage(self.driver)
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
+    login_page = LoginPage(driver)
 
     def test_jira_login(self):
         assert self.login_page.login_to_jira()
