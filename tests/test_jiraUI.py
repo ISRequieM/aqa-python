@@ -7,7 +7,8 @@ from selenium.webdriver.chrome.options import Options
 class TestJiraLogin:
     chrome_options = Options()
     chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
+    #driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
+    driver = webdriver.Chrome(chrome_options=chrome_options)
     login_page = LoginPage(driver)
 
     def test_jira_login(self):
@@ -15,3 +16,5 @@ class TestJiraLogin:
 
     def test_cleanup(self):
         self.driver.quit()
+
+
