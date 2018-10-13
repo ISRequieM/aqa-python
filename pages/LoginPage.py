@@ -34,5 +34,17 @@ class LoginPage:
         except TimeoutException:
             return False
 
+    def login_to_jira_creds_privided(self, user, password):
+        self.driver_instance.get(JiraParameters.url+self.login_url)
+        login_button = self.wait.until(expected_conditions.visibility_of_element_located(self.LOGIN_BUTTON))
+        self.driver_instance.find_element(*self.USER_INPUT).send_keys(user)
+        self.driver_instance.find_element(*self.PASSWORD_INPUT).send_keys(password)
+        login_button.click()
+        try:
+            self.wait.until(expected_conditions.visibility_of_element_located(self.USER_HEADER))
+            return True
+        except TimeoutException:
+            return False
+
 
 
