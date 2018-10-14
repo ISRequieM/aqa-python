@@ -38,7 +38,7 @@ class CreateIssuePage:
         submit_issue_button.click()
         popup_container = self.wait.until(expected_conditions.visibility_of_element_located(self.POPUP_CONTAINER))
         issue_key = popup_container.find_element(By.CLASS_NAME, "issue-created-key").get_attribute("data-issue-key")
-        self.wait.until(expected_conditions.invisibility_of_element(self.POPUP_CONTAINER))
+        #self.wait.until(expected_conditions.invisibility_of_element(self.POPUP_CONTAINER)) #doesn't work in circle ci container
         return issue_key
 
 
