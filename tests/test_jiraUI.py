@@ -39,7 +39,9 @@ def test_jira_login():
 
 
 def test_create_issue():
-    issue_keys["0"] = create_page.create_issue(project="AQAPYTHON", issue_type="Bug", summary="some_summary")
+    result = create_page.create_issue(project="AQAPYTHON", issue_type="Bug", summary="some_summary")
+    assert result.get("success")
+    issue_keys["0"] = result.get("issue_key")
     assert issue_keys.__sizeof__() > 0
     print(issue_keys.get("0"))
 

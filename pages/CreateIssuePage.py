@@ -1,7 +1,9 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from selenium.common.exceptions import TimeoutException
 
 
 class CreateIssuePage:
@@ -13,6 +15,7 @@ class CreateIssuePage:
     SUBMIT_ISSUE_BUTTON = (By.ID, "create-issue-submit")
     POPUP_CONTAINER = (By.ID, "aui-flag-container")
     CREATE_DIALOG = (By.ID, "create-issue-dialog")
+    return_result = {"success": None, "error_message": None, "error_in_field": None, "issue_key": None}
 
     driver = None
     wait = None
@@ -38,11 +41,20 @@ class CreateIssuePage:
         summary_field.send_keys(summary)
         submit_issue_button = self.wait.until(expected_conditions.element_to_be_clickable(self.SUBMIT_ISSUE_BUTTON))
         submit_issue_button.click()
-        self.wait.until_not(expected_conditions.invisibility_of_element(self.CREATE_DIALOG)) #doesn't work in circle ci container
-        popup_container = self.wait.until(expected_conditions.visibility_of_element_located(self.POPUP_CONTAINER))
+        self.wait.until_not(expected_conditions.invisibility_of_element(self.CREATE_DIALOG))
+        try:
+            popup_container = self.wait.until(expected_conditions.visibility_of_element_located(self.POPUP_CONTAINER))
+        except TimeoutException:
+            print("Failed to post issue")
+            error = self.wait.until(expected_conditions.presence_of_element_located(By.CSS_SELECTOR, "#create-issue-dialog div.error"))
+            self.return_result["error_in_field"] = error.get_attribute("data-field")
+            self.return_result["error_message"] = error.text()
+            self.return_result["success"] = False
+            return self.return_result
         issue_key = popup_container.find_element(By.CLASS_NAME, "issue-created-key").get_attribute("data-issue-key")
-        self.wait.until(expected_conditions.invisibility_of_element(self.POPUP_CONTAINER)) #doesn't work in circle ci container
-
-        return issue_key
+        #self.wait.until(expected_conditions.invisibility_of_element(self.POPUP_CONTAINER)) #doesn't work in circle ci container
+        self.return_result["success"] = True
+        self.return_result["issue_key"] = issue_key
+        return self.return_result
 
 
