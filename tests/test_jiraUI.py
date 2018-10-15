@@ -1,3 +1,4 @@
+import pytest
 from webdriver_manager.chrome import ChromeDriverManager
 
 from jira.jira import JiraParameters
@@ -12,6 +13,7 @@ chrome_options = Options()
 chrome_options.add_argument("--headless")
 #driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
 driver = webdriver.Chrome(options=chrome_options)
+#driver = webdriver.Chrome()
 driver.implicitly_wait(10)
 driver.set_page_load_timeout(10)
 driver.set_script_timeout(10)
