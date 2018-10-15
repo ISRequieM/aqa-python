@@ -23,9 +23,9 @@ class Test_JiraUI:
         # driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
         self.driver = webdriver.Chrome(options=chrome_options)
         # self.driver = webdriver.Chrome()
-        self.driver.implicitly_wait(10)
-        self.driver.set_page_load_timeout(10)
-        self.driver.set_script_timeout(10)
+        self.driver.implicitly_wait(20)
+        self.driver.set_page_load_timeout(20)
+        self.driver.set_script_timeout(20)
         self.login_page = LoginPage(self.driver)
         self.create_page = CreateIssuePage(self.driver)
         user = JiraParameters.user
