@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.7.0-stretch-browsers
+      - image: circleci/python:3.7.0-browsers
 
     working_directory: ~/aqa-python
 
