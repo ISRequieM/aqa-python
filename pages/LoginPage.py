@@ -24,7 +24,7 @@ class LoginPage:
 
     def login_to_jira(self):
         self.driver_instance.get(JiraParameters.url+self.login_url)
-        login_button = self.wait.until(expected_conditions.visibility_of_element_located(self.LOGIN_BUTTON))
+        login_button = self.wait.until(expected_conditions.element_to_be_clickable(self.LOGIN_BUTTON))
         self.driver_instance.find_element(*self.USER_INPUT).send_keys(*self.user)
         self.driver_instance.find_element(*self.PASSWORD_INPUT).send_keys(*self.password)
         login_button.click()

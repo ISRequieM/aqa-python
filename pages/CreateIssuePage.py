@@ -25,7 +25,7 @@ class CreateIssuePage:
         self.wait = WebDriverWait(driver, 10)
 
     def create_issue(self, project, issue_type, summary, description=None, priority=None, assignee=None):
-        create_button = self.wait.until(expected_conditions.visibility_of_element_located(self.CREATE_BUTTON))
+        create_button = self.wait.until(expected_conditions.element_to_be_clickable(self.CREATE_BUTTON))
         create_button.click()
         self.wait.until(expected_conditions.presence_of_element_located(self.CREATE_DIALOG))
         project_field = self.wait.until(expected_conditions.element_to_be_clickable(self.PROJECT_FIELD))
@@ -46,11 +46,12 @@ class CreateIssuePage:
             popup_container = self.wait.until(expected_conditions.visibility_of_element_located(self.POPUP_CONTAINER))
         except TimeoutException:
             print("Failed to post issue")
-            error = self.wait.until(expected_conditions.presence_of_element_located(By.CSS_SELECTOR, "#create-issue-dialog div.error"))
+            error = self.wait.until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "#create-issue-dialog div.error")))
             self.return_result["error_in_field"] = error.get_attribute("data-field")
-            self.return_result["error_message"] = error.text()
+            self.return_result["error_message"] = error.text
             self.return_result["success"] = False
             return self.return_result
+        #popup_container = self.driver.find_element(self.POPUP_CONTAINER)
         issue_key = popup_container.find_element(By.CLASS_NAME, "issue-created-key").get_attribute("data-issue-key")
         #self.wait.until(expected_conditions.invisibility_of_element(self.POPUP_CONTAINER)) #doesn't work in circle ci container
         self.return_result["success"] = True
