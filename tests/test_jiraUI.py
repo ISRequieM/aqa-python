@@ -22,7 +22,7 @@ class Test_JiraUI:
         chrome_options.add_argument("--headless")
         # driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
         self.driver = webdriver.Chrome(options=chrome_options)
-        #self.driver = webdriver.Firefox()
+        # self.driver = webdriver.Chrome()
         self.driver.implicitly_wait(10)
         self.driver.set_page_load_timeout(10)
         self.driver.set_script_timeout(10)
@@ -63,4 +63,4 @@ class Test_JiraUI:
         assert result.get("success")
         self.issue_key = result.get("issue_key")
         assert self.issue_key is not None
-        print("\n"+self.issue_keys.get("0"))
+        print("\n"+self.issue_key)
