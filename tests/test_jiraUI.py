@@ -20,9 +20,9 @@ class Test_JiraUI:
     def setup(self, request):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        # driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
+        # driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options) # doesn't work in circle ci container
         self.driver = webdriver.Chrome(options=chrome_options)
-        # self.driver = webdriver.Chrome()
+        #self.driver = webdriver.Chrome()
         self.driver.implicitly_wait(20)
         self.driver.set_page_load_timeout(20)
         self.driver.set_script_timeout(20)
@@ -56,6 +56,21 @@ class Test_JiraUI:
         assert result.get("issue_key") is None
         assert result.get("error_in_field") == "summary"
         assert result.get("error_message") == "You must specify a summary of the issue."
+
+    def test_create_issue_too_long_summary(self, setup):
+        assert self.login_page.login_to_jira() == True
+        summary = 'some_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarys'+\
+                            'ome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysom'+\
+                            'e_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_s'+\
+                            'ummarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summa'+\
+                            'rysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome'+\
+                            '_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summary'+\
+                            'some_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summary'
+        result = self.create_page.create_issue(project="AQAPYTHON", issue_type="Bug", summary=summary)
+        assert result.get("success") == False
+        assert result.get("issue_key") is None
+        assert result.get("error_in_field") == "summary"
+        assert result.get("error_message") == "Summary must be less than 255 characters."
 
     def test_create_issue(self, setup):
         assert self.login_page.login_to_jira() == True
