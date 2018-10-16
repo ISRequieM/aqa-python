@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -7,6 +9,7 @@ from pages.LoginPage import LoginPage
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from jira.jira import JiraRestActions
+from pages.SearchIssuePage import SearchIssuePage
 
 
 class Test_JiraUI:
@@ -15,6 +18,7 @@ class Test_JiraUI:
     create_page = None
     issue_key = None
     rest_actions = None
+    issue_filter_page = None
 
     @pytest.fixture(scope="function")
     def setup(self, request):
@@ -28,6 +32,7 @@ class Test_JiraUI:
         self.driver.set_script_timeout(20)
         self.login_page = LoginPage(self.driver)
         self.create_page = CreateIssuePage(self.driver)
+        self.issue_filter_page = SearchIssuePage(self.driver)
         user = JiraParameters.user
         password = JiraParameters.password
         project_key = JiraParameters.project_key
@@ -78,4 +83,16 @@ class Test_JiraUI:
         assert result.get("success")
         self.issue_key = result.get("issue_key")
         assert self.issue_key is not None
-        print("\n"+self.issue_key)
+        print("\n" + self.issue_key)
+        result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", issue_status="TO DO",
+                                                             issue_type="Bug", search_text="some_summary")
+        assert result.get("total_results") == "1"
+
+
+
+    def test_issue_filter(self, setup):
+        assert self.login_page.login_to_jira() == True
+        result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", issue_status="TO DO",
+                                                             issue_type="Bug", search_text="some_summary")
+        assert result.get("total_results") == "0"
+
