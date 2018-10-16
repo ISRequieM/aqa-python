@@ -87,12 +87,3 @@ class Test_JiraUI:
         result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", issue_status="TO DO",
                                                              issue_type="Bug", search_text="some_summary")
         assert result.get("total_results") == "1"
-
-
-
-    def test_issue_filter(self, setup):
-        assert self.login_page.login_to_jira() == True
-        result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", issue_status="TO DO",
-                                                             issue_type="Bug", search_text="some_summary")
-        assert result.get("total_results") == "0"
-
