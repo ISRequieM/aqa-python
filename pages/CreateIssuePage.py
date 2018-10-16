@@ -4,6 +4,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import TimeoutException
+from pages.common import CommonObjects
 
 
 class CreateIssuePage:
@@ -19,12 +20,15 @@ class CreateIssuePage:
 
     driver = None
     wait = None
+    common_objects = None
 
     def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 20)
+        self.wait = WebDriverWait(self.driver, 20)
+        self.common_objects = CommonObjects(self.driver)
 
     def create_issue(self, project, issue_type, summary, description=None, priority=None, assignee=None):
+        self.common_objects.close_timezone_popup()
         create_button = self.wait.until(expected_conditions.element_to_be_clickable(self.CREATE_BUTTON))
         create_button.click()
         self.wait.until(expected_conditions.presence_of_element_located(self.CREATE_DIALOG))

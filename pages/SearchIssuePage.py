@@ -5,6 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import StaleElementReferenceException
+from pages.common import CommonObjects
 from selenium import webdriver
 import time
 from jira.jira import JiraParameters
@@ -30,13 +31,16 @@ class SearchIssuePage:
 
     driver = None
     wait = None
+    common_objects = None
 
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 20)
+        self.common_objects = CommonObjects(self.driver)
 
     def go_to_page(self):
         self.driver.get(JiraParameters.url+self.page_url)
+        self.common_objects.close_timezone_popup()
         self.wait.until(expected_conditions.element_to_be_clickable(self.CRITERIA_PROJECT_BUTTON))
 
     def wait_table_refreshed(self):
