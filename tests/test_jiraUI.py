@@ -10,6 +10,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from jira.jira import JiraRestActions
 from pages.SearchIssuePage import SearchIssuePage
+from pages.IssuePage import IssuePage
 
 
 class Test_JiraUI:
@@ -19,6 +20,7 @@ class Test_JiraUI:
     issue_key = None
     rest_actions = None
     issue_filter_page = None
+    issue_page = None
 
     @pytest.fixture(scope="function")
     def setup(self, request):
@@ -33,6 +35,7 @@ class Test_JiraUI:
         self.login_page = LoginPage(self.driver)
         self.create_page = CreateIssuePage(self.driver)
         self.issue_filter_page = SearchIssuePage(self.driver)
+        self.issue_page = IssuePage(self.driver)
         user = JiraParameters.user
         password = JiraParameters.password
         project_key = JiraParameters.project_key
@@ -87,3 +90,7 @@ class Test_JiraUI:
         result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", issue_status="TO DO",
                                                              issue_type="Bug", search_text="some_summary")
         assert result.get("total_results") == "1"
+        self.issue_page.assign_issue_to_me(self.issue_key)
+        self.issue_page.update_priority(self.issue_key, "High")
+        self.issue_page.update_summary(self.issue_key, "updated summary by isotnik")
+        time.sleep(10)
