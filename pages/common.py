@@ -11,6 +11,7 @@ from jira.jira import JiraParameters
 class CommonObjects:
     TIMEZONE_POPUP = (By.CSS_SELECTOR, "#aui-flag-container div.aui-message-info.closeable.shadowed")
     TIMEZONE_POPUP_CLOSE = (By.CSS_SELECTOR, "#aui-flag-container div.aui-message-info.closeable.shadowed>span[role='button']")
+    BUSY_ANNIMATION_SPINNER = (By.CSS_SELECTOR, "div.spinner")
 
     driver = None
     wait = None
@@ -26,6 +27,9 @@ class CommonObjects:
             self.wait.until(expected_conditions.invisibility_of_element_located(self.TIMEZONE_POPUP))
         except WebDriverException:
             print("\n No timezone popup was shown actually")
+
+    def wait_until_busy_spinner_hidden(self):
+        WebDriverWait(self.driver, 20).until(expected_conditions.invisibility_of_element_located(self.BUSY_ANNIMATION_SPINNER))
 
 
 
