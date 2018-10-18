@@ -20,7 +20,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python -m pytest -n=4 --dist loadfile --reruns=4 --alluredir=test-reports --allure-epics "Jira REST API" -v -l
+            python -m pytest --reruns=4 --alluredir=test-reports --allure-epics "Jira REST API" -v -l
 
       - store_artifacts:
           path: test-reports
