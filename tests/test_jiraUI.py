@@ -1,7 +1,9 @@
 import time
-
+import allure
 import pytest
+from allure_commons.types import AttachmentType
 from webdriver_manager.chrome import ChromeDriverManager
+import inspect
 
 from jira.jira import JiraParameters
 from pages.CreateIssuePage import CreateIssuePage
@@ -52,20 +54,33 @@ class Test_JiraUI:
         request.addfinalizer(fin)
         print("\nSetup was performed")
 
+    @allure.title('Test-UI-Login-Wrong-Password')
+    @allure.description('Rest API authorization with wrong password')
     def test_jira_login_wrong_password(self, setup):
         assert self.login_page.login_to_jira_creds_privided(JiraParameters.user, "admin") == False
+        allure.attach(name=inspect.stack()[0][3], body=self.driver.get_screenshot_as_png(), attachment_type=AttachmentType.PNG)
 
+    @allure.title('Test-UI-Login-Wrong-Username')
+    @allure.description('Rest API authorization using wrong username')
     def test_jira_login_wrong_username(self, setup):
         assert self.login_page.login_to_jira_creds_privided("admin", JiraParameters.password) == False
+        allure.attach(name="Error when login with wrong user name", body=self.driver.get_screenshot_as_png(),
+                      attachment_type=AttachmentType.PNG)
 
+    @allure.title('Test-UI-Create-Missing-Required-Field')
+    @allure.description('Jira UI create issue with missing summary')
     def test_create_issue_missing_summary(self, setup):
         assert self.login_page.login_to_jira() == True
         result = self.create_page.create_issue(project="AQAPYTHON", issue_type="Bug", summary="")
+        allure.attach(name="Creating issue with missing summary", body=self.driver.get_screenshot_as_png(),
+                      attachment_type=AttachmentType.PNG)
         assert result.get("success") == False
         assert result.get("issue_key") is None
         assert result.get("error_in_field") == "summary"
         assert result.get("error_message") == "You must specify a summary of the issue."
 
+    @allure.title('Test-UI-Create-Too-Long-Field')
+    @allure.description('Jira UI create issue with too long summary')
     def test_create_issue_too_long_summary(self, setup):
         assert self.login_page.login_to_jira() == True
         summary = 'some_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarys' + \
@@ -76,14 +91,20 @@ class Test_JiraUI:
                   '_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summary' + \
                   'some_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summary'
         result = self.create_page.create_issue(project="AQAPYTHON", issue_type="Bug", summary=summary)
+        allure.attach(name="Creating issue with too long summary", body=self.driver.get_screenshot_as_png(),
+                      attachment_type=AttachmentType.PNG)
         assert result.get("success") == False
         assert result.get("issue_key") is None
         assert result.get("error_in_field") == "summary"
         assert result.get("error_message") == "Summary must be less than 255 characters."
 
+    @allure.title('Test-UI-Issue-CRUD')
+    @allure.description('Jira UI CRUD operations with issue')
     def test_create_update_issue(self, setup):
         assert self.login_page.login_to_jira() == True
         result = self.create_page.create_issue(project="AQAPYTHON", issue_type="Bug", summary="some_summary")
+        allure.attach(name="Issue was just created", body=self.driver.get_screenshot_as_png(),
+                      attachment_type=AttachmentType.PNG)
         assert result.get("success")
         self.issues["0"] = result.get("issue_key")
         assert self.issues.get("0") is not None
@@ -92,15 +113,18 @@ class Test_JiraUI:
         self.issue_page.update_summary(self.issues.get("0"), "updated summary by isotnik")
         result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", issue_status="TO DO",
                                                              issue_type="Bug", search_text="updated summary by isotnik")
+        allure.attach(name="Filtering issues by text", body=self.driver.get_screenshot_as_png(),
+                      attachment_type=AttachmentType.PNG)
         assert result.get("total_results") == "1"
 
+    @allure.title('Test-UI-Issue-Filtering')
+    @allure.description('Jira UI create issue with too long summary')
     def test_filter_issues(self, setup):
         assert self.login_page.login_to_jira() == True
         result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", search_text="some_summary by isotnik")
         assert result.get("total_results") == "0"
 
         self.rest_actions.authenticate()
-        issues = {}
         issue_fields = {'summary': 'some_summary by isotnik', 'description': 'item created via rest api'}
         result = self.rest_actions.createIssue("Story", issue_fields)
         assert result.get("status_code") == 201
@@ -124,6 +148,10 @@ class Test_JiraUI:
 
         result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", search_text="some_summary by isotnik")
         assert result.get("total_results") == "5"
+        allure.attach(name="Filtering issues by text", body=self.driver.get_screenshot_as_png(),
+                      attachment_type=AttachmentType.PNG)
         result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", search_text="some_summary by isotnik", issue_status="TO DO", issue_type="Bug")
+        allure.attach(name="Filtering issues by text and issue type", body=self.driver.get_screenshot_as_png(),
+                      attachment_type=AttachmentType.PNG)
         assert result.get("total_results") == "3"
 
