@@ -35,6 +35,7 @@ class Test_JiraUI:
         self.driver.implicitly_wait(20)
         self.driver.set_page_load_timeout(20)
         self.driver.set_script_timeout(20)
+        self.driver.set_window_size(1440, 900)
         self.login_page = LoginPage(self.driver)
         self.create_page = CreateIssuePage(self.driver)
         self.issue_filter_page = SearchIssuePage(self.driver)
@@ -153,9 +154,9 @@ class Test_JiraUI:
         self.issues["4"] = result.get("issueKey")
 
         result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", search_text="some_summary by isotnik")
-        assert result.get("total_results") == "5"
         allure.attach(name="Filtering issues by text", body=self.driver.get_screenshot_as_png(),
                       attachment_type=AttachmentType.PNG)
+        assert result.get("total_results") == "5"
         result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", search_text="some_summary by isotnik", issue_status="TO DO", issue_type="Bug")
         allure.attach(name="Filtering issues by text and issue type", body=self.driver.get_screenshot_as_png(),
                       attachment_type=AttachmentType.PNG)
