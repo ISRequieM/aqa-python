@@ -1,6 +1,9 @@
 from jira.jira import *
 import random
 import pytest
+import allure
+
+
 
 jira_rest = JiraRestActions(JiraParameters.user, JiraParameters.password, JiraParameters.project_key)
 
@@ -19,6 +22,8 @@ def setup(request):
     request.addfinalizer(fin)
 
 
+@allure.epic('Jira REST API')
+@allure.title('Create issue with missing required fields')
 def test_create_issue_missing_field():
     issue_fields = {}
     result = jira_rest.createIssue("Bug", issue_fields)
@@ -26,6 +31,8 @@ def test_create_issue_missing_field():
     assert str(result.get("errors")).__contains__("You must specify a summary of the issue.")
 
 
+@allure.epic('Jira REST API')
+@allure.title('Create issue with too long summary')
 def test_create_issue_too_big_summary():
     issue_fields = {'summary': 'some_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarys'
                                'ome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysome_summarysom'
@@ -39,6 +46,8 @@ def test_create_issue_too_big_summary():
     assert str(result.get("errors")).__contains__("Summary must be less than 255 characters.")
 
 
+@allure.epic('Jira REST API')
+@allure.title('Issue CRUD flow')
 def test_create_issue():
     issue_fields = {'summary': 'some_summary', 'description': 'some_description'}
     result = jira_rest.createIssue("Bug", issue_fields)

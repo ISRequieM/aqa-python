@@ -54,12 +54,14 @@ class Test_JiraUI:
         request.addfinalizer(fin)
         print("\nSetup was performed")
 
+    @allure.epic('Jira WebUI')
     @allure.title('Test-UI-Login-Wrong-Password')
     @allure.description('Rest API authorization with wrong password')
     def test_jira_login_wrong_password(self, setup):
         assert self.login_page.login_to_jira_creds_privided(JiraParameters.user, "admin") == False
         allure.attach(name=inspect.stack()[0][3], body=self.driver.get_screenshot_as_png(), attachment_type=AttachmentType.PNG)
 
+    @allure.epic('Jira WebUI')
     @allure.title('Test-UI-Login-Wrong-Username')
     @allure.description('Rest API authorization using wrong username')
     def test_jira_login_wrong_username(self, setup):
@@ -67,6 +69,7 @@ class Test_JiraUI:
         allure.attach(name="Error when login with wrong user name", body=self.driver.get_screenshot_as_png(),
                       attachment_type=AttachmentType.PNG)
 
+    @allure.epic('Jira WebUI')
     @allure.title('Test-UI-Create-Missing-Required-Field')
     @allure.description('Jira UI create issue with missing summary')
     def test_create_issue_missing_summary(self, setup):
@@ -79,6 +82,7 @@ class Test_JiraUI:
         assert result.get("error_in_field") == "summary"
         assert result.get("error_message") == "You must specify a summary of the issue."
 
+    @allure.epic('Jira WebUI')
     @allure.title('Test-UI-Create-Too-Long-Field')
     @allure.description('Jira UI create issue with too long summary')
     def test_create_issue_too_long_summary(self, setup):
@@ -98,6 +102,7 @@ class Test_JiraUI:
         assert result.get("error_in_field") == "summary"
         assert result.get("error_message") == "Summary must be less than 255 characters."
 
+    @allure.epic('Jira WebUI')
     @allure.title('Test-UI-Issue-CRUD')
     @allure.description('Jira UI CRUD operations with issue')
     def test_create_update_issue(self, setup):
@@ -117,6 +122,7 @@ class Test_JiraUI:
                       attachment_type=AttachmentType.PNG)
         assert result.get("total_results") == "1"
 
+    @allure.epic('Jira WebUI')
     @allure.title('Test-UI-Issue-Filtering')
     @allure.description('Jira UI create issue with too long summary')
     def test_filter_issues(self, setup):
