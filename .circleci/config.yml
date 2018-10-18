@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.7.0
+      - image: circleci/python:3.7.0-browsers
 
     working_directory: ~/aqa-python
 
@@ -14,11 +14,11 @@ jobs:
           command: |
             python -m venv venv
             . venv/bin/activate
+            pip install --upgrade pip
             pip install -r requirements.txt
       - run:
           name: run tests
           command: |
-            python -m venv venv
             . venv/bin/activate
             python -m pytest -n=4 --dist loadfile --reruns=4 -v -l
 
