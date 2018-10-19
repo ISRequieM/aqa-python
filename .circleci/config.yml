@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Generating report
           when: always
-          commend: |
+          command: |
             . venv/bin/activate
             ./allure-2.7.0/bin/allure generate ./allure-results -o ./test_reports_html/
       - store_artifacts:
