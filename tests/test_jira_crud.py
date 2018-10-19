@@ -13,7 +13,7 @@ updated_summary = "updated_summary_by_istonik_" + str(random.randint(1, 1000))
 
 @pytest.fixture(scope="function", autouse=True)
 def setup(request):
-    jira_rest.authenticate()
+    assert jira_rest.authenticate().get("success")
     def fin():
         for key in issue_keys.values():
             result = jira_rest.delete_issue(key)

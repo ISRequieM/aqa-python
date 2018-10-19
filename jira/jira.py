@@ -28,10 +28,10 @@ class JiraRestActions:
         if auth_r.status_code == 200:
             print("Succefully authenticated!")
             self.cookies = {"JSESSIONID": responseJson.get("session").get("value")}
-            return responseJson.get("session").get("value")
+            return {"success": True, "session_id": responseJson.get("session").get("value")}
         else:
             print("Authenticate attempt was unsuccessful")
-            return "Failed"
+            return {"success": False}
 
     def createIssue(self, issueType, issue_fields):
         headers = get_contenttype_header("json")

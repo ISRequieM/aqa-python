@@ -48,7 +48,7 @@ class Test_JiraUI:
         def fin():
             print("\nPerforming tear down")
             self.driver.quit()
-            assert self.rest_actions.authenticate() != "Failed"
+            assert self.rest_actions.authenticate().get("success")
             for key in self.issues.values():
                 assert self.rest_actions.delete_issue(key).get("success")
             self.issues = {}
@@ -131,7 +131,7 @@ class Test_JiraUI:
         result = self.issue_filter_page.define_simple_filter(project="AQAPYTHON", search_text="some_summary by isotnik")
         assert result.get("total_results") == "0"
 
-        self.rest_actions.authenticate()
+        assert self.rest_actions.authenticate().get("success")
         issue_fields = {'summary': 'some_summary by isotnik', 'description': 'item created via rest api'}
         result = self.rest_actions.createIssue("Story", issue_fields)
         assert result.get("status_code") == 201
