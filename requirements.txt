@@ -4,3 +4,4 @@ pytest-xdist
 pytest-rerunfailures
 selenium
 webdriver_manager
+allure-pytest
